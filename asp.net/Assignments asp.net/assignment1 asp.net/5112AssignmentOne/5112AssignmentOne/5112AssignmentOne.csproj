@@ -156,12 +156,12 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\Q1Controller.cs" />
-    <Compile Include="Controllers\Q2Controller.cs" />
-    <Compile Include="Controllers\Q3Controller.cs" />
-    <Compile Include="Controllers\Q4Controller.cs" />
-    <Compile Include="Controllers\Q5Controller.cs" />
-    <Compile Include="Controllers\Q6Controller.cs" />
+    <Compile Include="Controllers\AddTenController.cs" />
+    <Compile Include="Controllers\SquareController.cs" />
+    <Compile Include="Controllers\GreetingController.cs" />
+    <Compile Include="Controllers\GreetingsQ4Controller.cs" />
+    <Compile Include="Controllers\NumberMachineController.cs" />
+    <Compile Include="Controllers\HostingCostController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
