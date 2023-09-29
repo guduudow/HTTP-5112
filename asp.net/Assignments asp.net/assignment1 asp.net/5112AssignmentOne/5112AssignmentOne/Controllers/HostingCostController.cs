@@ -28,17 +28,7 @@ namespace _5112AssignmentOne.Controllers
 
 
             double costWithTax = (dailyRate * hst) + dailyRate;
-            double cost = Math.Round(costWithTax, 2);
-
-
-
-
-
-            //int numOfDays = 14 * numOfFortnights;
-            //int totalCost = numOfDays;
-
-
-
+           
             return new string[]
             {
                   (numOfFortnights + " " + "fortnights at $5.50/FN = " + " " + "$" + dailyRate + " " + "CAD"),
