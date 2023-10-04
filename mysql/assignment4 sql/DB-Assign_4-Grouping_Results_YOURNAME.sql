@@ -18,6 +18,8 @@ SELECT COUNT(item) AS "items", category AS "mammals" FROM stock_items WHERE cate
 --B
 SELECT SUM(inventory) AS "in-stock", category AS "animal" FROM stock_items GROUP BY category ORDER BY SUM(inventory) ASC;
 --C
+SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+
 SELECT MAX(price), category FROM stock_items GROUP BY category ORDER BY MAX(price) DESC;
 --D
-SELECT MAX(price) AS "item /highest price", category FROM stock_items GROUP BY category DESC HAVING MAX(price) > 50;
+SELECT MAX(price) AS "highest price", item, category FROM stock_items GROUP BY category DESC HAVING MAX(price) > 50;
