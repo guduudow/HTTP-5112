@@ -13,10 +13,10 @@ namespace _5112AssignmentTwo.Controllers
         /// <summary>
         /////input time in Ottawa (i.e. eastern Time) output local time in each zone in 24 hour format
         ///</summary>
-        ///<input>J3/GoodTimes/{time}
+        ///<input>J3/GoodTimes/{hour}/{min}
         ///issue: how to get time to change as in 1359 should become 1400 and not 1360. use modulus
         ///create a if statement that if the minute hand difference is greater than 30, add an hour to NL time.
-        /// <param name="time"></param>
+        /// <param name="hour" name="min"></param>
         /// <returns>
         /// time in ottawa
         /// time in toronto
@@ -26,41 +26,62 @@ namespace _5112AssignmentTwo.Controllers
         /// time in st. john's
         /// time in edmonton
         /// </returns>
-        [Route("J3/GoodTimes/{time}")]
+        [Route("J3/GoodTimes/{hour}/{min}")]
         [HttpGet]
-        public IEnumerable<string> Get(int time)
+        public IEnumerable<string> Get(int hour, int min)
         {
 
 
 
-            
-            int standardTime = time;
-            int easternTime = standardTime;
-            int centralTime = standardTime - 100;
-            int pacificTime = standardTime - 300;
-            int atlanticTime = standardTime + 100;
-            int newfoundlandTime = standardTime + 130;
-            int mountainTime = standardTime - 200;
 
-            
+            int torontoHour = hour;
+            int torontoMin = min;
+            int ottawaHour = hour;
+            int ottawaMin = min;
+            int halifaxHour = hour + 1;
+            int halifaxMin = min;
+            int edmontonHour = hour - 2;
+            int edmontonMin = min;
+            int victoriaHour = hour - 3;
+            int victoriaMin = min;
+            int winnipegHour = hour - 1;
+            int winnipegMin = min;
+            int nlHour = hour;
+            int nlMin = min;
+
+            if (nlMin >= 30) //newfoundland is ahead of eastern time by one hour and thirty minutes, if statement is needed if minute hand is greater than 30.
+            {
+                int sum = nlMin + 30;
+                int remainder = sum - 60;
+                nlMin = remainder;
+                nlHour = nlHour + 2;
+            }
+            else
+            {
+                nlHour = nlHour + 1;
+                nlMin = nlMin + 30;
+            }
+
+
 
             return new string[] {
-                
-                (easternTime + " in Ottawa "),
-                (easternTime + " in Toronto "),
-                (centralTime + " in Winnipeg "),
-                (pacificTime + " in Vancouver "),
-                (atlanticTime + " in Halifax "),
-                (newfoundlandTime + " in St. John's "),
-                (mountainTime + " in Edmonton ")
-                };
+
+                ottawaHour.ToString() + ":" + ottawaMin.ToString() + " in Ottawa",
+                torontoHour.ToString() + ":" + torontoMin.ToString() + " in Toronto",
+                halifaxHour.ToString() + ":" + halifaxMin.ToString() + " in Halifax",
+                edmontonHour.ToString() + ":" + edmontonMin.ToString() + " in Edmonton",
+                victoriaHour.ToString() + ":" + victoriaMin.ToString() + " in Victoria",
+                winnipegHour.ToString() + ":" + winnipegMin.ToString() + " in Winnipeg",
+                nlHour.ToString() + ":" + nlMin.ToString() + " in St.John's"
 
 
 
-    }
-            
-            
-            
-            
+
+            };
+
+
+
+
+        }
     }
 }

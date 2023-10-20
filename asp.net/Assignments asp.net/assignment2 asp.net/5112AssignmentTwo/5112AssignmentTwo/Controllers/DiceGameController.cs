@@ -25,15 +25,7 @@ namespace _5112AssignmentTwo.Controllers
             int g; //short for gets
             int i;
             int ways = 0;
-            /* my original way
-            for (g = 1; g <= m && g < 10; g = g + 1)
-            {
-                if (10 - g <= n)
-                {
-                    ways++;
-                }
-            }
-            */
+           
             for (g = 1; g <= m; g++)
             {
                 for (i =1; i <= n; i++)

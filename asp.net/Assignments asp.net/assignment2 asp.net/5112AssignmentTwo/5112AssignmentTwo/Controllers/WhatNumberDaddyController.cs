@@ -9,7 +9,7 @@ namespace _5112AssignmentTwo.Controllers
 {
     //2010 CCC - J1 "What's n, Daddy?"
     ///<summary>Writeshow many times a number (between 1 and 10) can be represented with fingers.</summary>
-    ///<name param="n"></name>
+    ///<name> param="n"></name>
     ///<example>The number 5 can be represented 3 times (5 fingers and zero) (4 fingers and 1 finger) and (3 fingers and 2 fingers)</example>
     ///
 
