@@ -27,9 +27,9 @@ VALUES
 
 INSERT INTO posts (post_id, title, post_content, author_id, date_published)
 VALUES 
-    (),
-    (),
-    ();
+    (1, "Top 50 NES Games", "Here are the 50 best games on Nintendo's first console.", 2, "2023-10-30 08:00:00"),
+    (2, "DOOM: Eternal Review on PC", "Bethesda's sequel to 2016's DOOM is extra gory one." 3, "2020-03-15 12:35:21"),
+    (3, "Our Favourite Gaming Secrets", "Easter eggs as they are called are as old as gaming itself, here are our favourites." 1, "2014-05-17 15:43:05");
 
 -- 2
 --A
@@ -43,14 +43,22 @@ CREATE TABLE Comments (
     FOREIGN KEY (author_id) REFERENCES authors(author_id)
 );
 --B
-INSERT INTO Comments (post_id, author_id, comment_text, created_at)
+INSERT INTO Comments (post_id, author_id, comment_text)
 VALUES 
-    (),
-    (),
-    ();
+    (1,2, "Yup, Super Mario Bros. 3 is the best game on the NES."),
+    (2,3, "LMAO YOU GAVE IT 7?? DO YOU GUYS EVEN KNOW GAMING??"),
+    (3,1, "Discovering the konami code as a kid was mind-blowing lol");
 
 -- 3
 --A
-
+ALTER TABLE Comments
+ADD comment_date DATETIME;
+    (1,2, "Yup, Super Mario Bros. 3 is the best game on the NES.", "2023-10-30 11:41:30"),
+    (2,3, "LMAO YOU GAVE IT 7?? DO YOU GUYS EVEN KNOW GAMING??", "2020-03-15 13:01:45"),
+    (3,1, "Discovering the konami code as a kid was mind-blowing lol", "2014-05-17 20:32:15");
 --B
-
+DELETE authors, posts
+FROM authors
+LEFT JOIN posts ON authors.author_id = posts.author_id
+ORDER BY authors.author_id
+LIMIT 2;
