@@ -22,6 +22,7 @@ namespace TeacherProject.Controllers
         /// GET/api/ClassesData/ListClasses
         /// </example>
         [HttpGet]
+        [Route("api/ClassesData/ListClasses/{SearchKey?}")]
         public IEnumerable<Classes> ListClasses(string SearchKey = null)
         {
             //create connection
