@@ -39,7 +39,7 @@ namespace TeacherProject.Controllers
             command.Prepare();
             //Gather result set of query into a variable
             MySqlDataReader reader = command.ExecuteReader();
-            //create an empty list of teachers
+            //create an empty list of students
             List<Student> StudentData = new List<Student>();
             //loop through each row of the result set
             while (reader.Read())

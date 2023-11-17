@@ -19,7 +19,7 @@ namespace TeacherProject.Controllers
         ///Returns a list of classes in the system
         /// </summary>
         /// <example>
-        /// GET/api/ClassData/ListClasses
+        /// GET/api/ClassesData/ListClasses
         /// </example>
         [HttpGet]
         public IEnumerable<Classes> ListClasses(string SearchKey = null)
@@ -38,7 +38,7 @@ namespace TeacherProject.Controllers
             command.Prepare();
             //Gather result set of query into a variable
             MySqlDataReader reader = command.ExecuteReader();
-            //create an empty list of teachers
+            //create an empty list of classes
             List<Classes> ClassesData = new List<Classes>();
             //loop through each row of the result set
             while (reader.Read())
@@ -50,7 +50,7 @@ namespace TeacherProject.Controllers
                 DateTime startdate = (DateTime)reader["startdate"];
                 DateTime finishdate = (DateTime)reader["finishdate"];
                 string classname = reader["classname"].ToString();
-                //string TeacherInfo = reader["teacherid"] + " " + reader["teacherfname"] + " " + reader["teacherlname"] + " " + reader["employeenumber"] + " " + reader["hiredate"] + " " + reader["salary"];
+                //string ClassInfo = reader["classId"] + " " + reader["classcode"] + " " + reader["teacherId"] + " " + reader["startdate"] + " " + reader["finishdate"] + " " + reader["classname"];
 
                 Classes NewClass = new Classes();
                 NewClass.ClassID = classId;
@@ -72,7 +72,7 @@ namespace TeacherProject.Controllers
         ///Find a class in the system given an id
         /// </summary>
         /// <param name="id">The class primary key</param>
-        /// <returns>A teacher object</returns>
+        /// <returns>A classes object</returns>
         [HttpGet]
         public Classes FindClasses(int id)
         {
