@@ -19,10 +19,11 @@ namespace TeacherProject.Controllers
         ///Returns a list of classes in the system
         /// </summary>
         /// <example>
-        /// GET/api/ClassData/ListClasses
+        /// GET/api/ClassesData/ListClasses
         /// </example>
         [HttpGet]
-        public IEnumerable<Classes> ListClasses()
+        [Route("api/ClassesData/ListClasses/{SearchKey?}")]
+        public IEnumerable<Classes> ListClasses(string SearchKey = null)
         {
             //create connection
             MySqlConnection conn = School.AccessDatabase();
@@ -33,10 +34,12 @@ namespace TeacherProject.Controllers
             //establish a new query for the database
             MySqlCommand command = conn.CreateCommand();
             //SQL Query goes here
-            command.CommandText = "SELECT * FROM CLASSES";
+            command.CommandText = "Select * from Classes where lower(classcode) like lower(@key) or lower(classname) like lower(@key)";
+            command.Parameters.AddWithValue("@key", "%" + SearchKey + "%");
+            command.Prepare();
             //Gather result set of query into a variable
             MySqlDataReader reader = command.ExecuteReader();
-            //create an empty list of teachers
+            //create an empty list of classes
             List<Classes> ClassesData = new List<Classes>();
             //loop through each row of the result set
             while (reader.Read())
@@ -48,7 +51,7 @@ namespace TeacherProject.Controllers
                 DateTime startdate = (DateTime)reader["startdate"];
                 DateTime finishdate = (DateTime)reader["finishdate"];
                 string classname = reader["classname"].ToString();
-                //string TeacherInfo = reader["teacherid"] + " " + reader["teacherfname"] + " " + reader["teacherlname"] + " " + reader["employeenumber"] + " " + reader["hiredate"] + " " + reader["salary"];
+                //string ClassInfo = reader["classId"] + " " + reader["classcode"] + " " + reader["teacherId"] + " " + reader["startdate"] + " " + reader["finishdate"] + " " + reader["classname"];
 
                 Classes NewClass = new Classes();
                 NewClass.ClassID = classId;
@@ -70,7 +73,7 @@ namespace TeacherProject.Controllers
         ///Find a class in the system given an id
         /// </summary>
         /// <param name="id">The class primary key</param>
-        /// <returns>A teacher object</returns>
+        /// <returns>A classes object</returns>
         [HttpGet]
         public Classes FindClasses(int id)
         {

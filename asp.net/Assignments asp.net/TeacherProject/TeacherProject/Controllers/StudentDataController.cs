@@ -23,7 +23,8 @@ namespace TeacherProject.Controllers
         /// GET/api/StudentData/ListStudents
         /// </example>
         [HttpGet]
-        public IEnumerable<Student> ListStudents()
+        [Route("api/StudentData/ListStudents/{SearchKey?}")]
+        public IEnumerable<Student> ListStudents(string SearchKey = null)
         {
             //create connection
             MySqlConnection conn = School.AccessDatabase();
@@ -34,10 +35,12 @@ namespace TeacherProject.Controllers
             //establish a new query for the database
             MySqlCommand command = conn.CreateCommand();
             //SQL Query goes here
-            command.CommandText = "SELECT * FROM STUDENTS";
+            command.CommandText = "Select * from Students where lower(studentfname) like lower(@key) or lower(studentlname) like lower(@key) or lower(concat(studentfname, ' ', studentlname)) like lower(@key)";
+            command.Parameters.AddWithValue("@key", "%" + SearchKey + "%");
+            command.Prepare();
             //Gather result set of query into a variable
             MySqlDataReader reader = command.ExecuteReader();
-            //create an empty list of teachers
+            //create an empty list of students
             List<Student> StudentData = new List<Student>();
             //loop through each row of the result set
             while (reader.Read())

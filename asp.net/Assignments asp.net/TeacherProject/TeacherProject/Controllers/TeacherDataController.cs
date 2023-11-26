@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Web.Http;
 using TeacherProject.Models;
 using MySql.Data.MySqlClient;
+using ZstdSharp.Unsafe;
+using System.Web.Http.Cors;
 
 namespace TeacherProject.Controllers
 {
@@ -23,7 +25,8 @@ namespace TeacherProject.Controllers
         /// GET/api/TeacherData/ListTeachers
         /// </example>
         [HttpGet]
-        public IEnumerable<Teacher> ListTeachers()
+        [Route("api/TeacherData/ListTeachers/{SearchKey?}")]
+        public IEnumerable<Teacher> ListTeachers(string SearchKey = null)
         {
             //create connection
             MySqlConnection conn = School.AccessDatabase();
@@ -34,7 +37,9 @@ namespace TeacherProject.Controllers
             //establish a new query for the database
             MySqlCommand command = conn.CreateCommand();
             //SQL Query goes here
-            command.CommandText = "SELECT * FROM TEACHERS";
+            command.CommandText = "Select * from Teachers where lower(teacherfname) like lower(@key) or lower(teacherlname) like lower(@key) or lower(concat(teacherfname, ' ', teacherlname)) like lower(@key)";
+            command.Parameters.AddWithValue("@key", "%" + SearchKey + "%");
+            command.Prepare();
             //Gather result set of query into a variable
             MySqlDataReader reader = command.ExecuteReader();
             //create an empty list of teachers
@@ -50,7 +55,7 @@ namespace TeacherProject.Controllers
                 DateTime hiredate = (DateTime)reader["hiredate"];
                 decimal salary = (decimal)reader["salary"];
                 //string TeacherInfo = reader["teacherid"] + " " + reader["teacherfname"] + " " + reader["teacherlname"] + " " + reader["employeenumber"] + " " + reader["hiredate"] + " " + reader["salary"];
-                
+
                 Teacher NewTeacher = new Teacher();
                 NewTeacher.TeacherID = teacherId;
                 NewTeacher.TeacherFName = teacherFname;
@@ -113,6 +118,78 @@ namespace TeacherProject.Controllers
 
             return NewTeacher;
         }
-    
+
+
+        ///<summary>
+        ///Deletes a teacher from the connected mySQL Database if the ID of that author exists.
+        /// </summary>
+        /// <param name="id">The ID of the teacher</param>
+        /// <example>POST /api/TeacherData/DeleteTeacher/3</example>
+        [HttpPost]
+        public void DeleteTeacher(int id)
+        {
+            //create an instance of a connection
+            MySqlConnection conn = School.AccessDatabase();
+
+            //open the connection between the web server and database
+            conn.Open();
+
+            //establish a new command (query) for our database
+            MySqlCommand cmd = conn.CreateCommand();
+
+            //SQL Query
+            cmd.CommandText = "Delete from teachers where authorid=@id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            //close the connection
+            conn.Close();
+        }
+
+        ///<summary>
+        ///adds a teacher to the mySQL database
+        /// </summary>
+        /// <param name="NewTeacher">An object with fields that map to the columns of the teacher's table</param>
+        /// <example>
+        /// POST api/TeacherData/AddTeacher
+        /// FORM DATA / POST DATA / REQUEST BODY
+        /// {
+        ///     "TeacherFname": Ederes
+        ///     "TeacherLname": Gure
+        ///     "EmployeeNumber":T304
+        ///     "HireDate": 2023-11-25 00:00:00
+        ///     "Salary": 81.00
+        /// }
+        /// </example>
+        [HttpPost]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void AddTeacher([FromBody] Teacher NewTeacher)
+        {
+            //create an instance of a connection
+            MySqlConnection conn = School.AccessDatabase();
+
+            //open the connection between the web server and database
+            conn.Open();
+
+            //establish a new command (query) for our database
+            MySqlCommand cmd = conn.CreateCommand();
+
+            //SQL Query
+            cmd.CommandText = "insert into teachers (teacherfname, teacherlname, employeenumber, hiredate, salary) values (@TeacherFname,@TeacherLname,@EmployeeNumber, CURRENT_DATE(), @Salary)";
+            cmd.Parameters.AddWithValue("@TeacherFname", NewTeacher.TeacherFName);
+            cmd.Parameters.AddWithValue("@TeacherLname", NewTeacher.TeacherLName);
+            cmd.Parameters.AddWithValue("@EmployeeNumber", NewTeacher.EmployeeNumber);
+            cmd.Parameters.AddWithValue("CURRENT_DATE()", NewTeacher.HireDate);
+            cmd.Parameters.AddWithValue("@Salary", NewTeacher.Salary);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            //close the connection
+            conn.Close();
+        }
+
     }
 }

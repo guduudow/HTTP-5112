@@ -16,10 +16,10 @@ namespace TeacherProject.Controllers
         }
 
         // GET: Classes/List
-        public ActionResult List()
+        public ActionResult List(string SearchKey = null)
         {
             ClassesDataController controller = new ClassesDataController();
-            IEnumerable<Classes> Classes = controller.ListClasses();
+            IEnumerable<Classes> Classes = controller.ListClasses(SearchKey);
             return View(Classes);
         }
 
