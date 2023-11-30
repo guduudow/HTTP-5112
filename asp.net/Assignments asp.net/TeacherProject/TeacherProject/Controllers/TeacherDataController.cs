@@ -138,7 +138,7 @@ namespace TeacherProject.Controllers
             MySqlCommand cmd = conn.CreateCommand();
 
             //SQL Query
-            cmd.CommandText = "Delete from teachers where authorid=@id";
+            cmd.CommandText = "Delete from teachers where teacherid=@id";
             cmd.Parameters.AddWithValue("@id", id);
             cmd.Prepare();
 
@@ -177,11 +177,11 @@ namespace TeacherProject.Controllers
             MySqlCommand cmd = conn.CreateCommand();
 
             //SQL Query
-            cmd.CommandText = "insert into teachers (teacherfname, teacherlname, employeenumber, hiredate, salary) values (@TeacherFname,@TeacherLname,@EmployeeNumber, CURRENT_DATE(), @Salary)";
+            cmd.CommandText = "insert into teachers (teacherfname, teacherlname, employeenumber, hiredate, salary) values (@TeacherFname,@TeacherLname,@EmployeeNumber,@HireDate,@Salary)";
             cmd.Parameters.AddWithValue("@TeacherFname", NewTeacher.TeacherFName);
             cmd.Parameters.AddWithValue("@TeacherLname", NewTeacher.TeacherLName);
             cmd.Parameters.AddWithValue("@EmployeeNumber", NewTeacher.EmployeeNumber);
-            cmd.Parameters.AddWithValue("CURRENT_DATE()", NewTeacher.HireDate);
+            cmd.Parameters.AddWithValue("@HireDate", NewTeacher.HireDate);
             cmd.Parameters.AddWithValue("@Salary", NewTeacher.Salary);
             cmd.Prepare();
 
