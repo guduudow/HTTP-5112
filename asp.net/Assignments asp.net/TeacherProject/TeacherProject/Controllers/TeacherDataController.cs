@@ -97,7 +97,9 @@ namespace TeacherProject.Controllers
             MySqlCommand cmd = conn.CreateCommand();
 
             //write out query
-            cmd.CommandText = "SELECT * FROM TEACHERS WHERE teacherid =" + id;
+            cmd.CommandText = "SELECT * FROM TEACHERS WHERE teacherid = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Prepare();
 
             //gather results into a variable
             MySqlDataReader reader = cmd.ExecuteReader();
