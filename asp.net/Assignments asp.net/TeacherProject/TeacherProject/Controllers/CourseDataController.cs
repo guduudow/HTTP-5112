@@ -9,21 +9,21 @@ using TeacherProject.Models;
 
 namespace TeacherProject.Controllers
 {
-    public class ClassesDataController : ApiController
+    public class CourseDataController : ApiController
     {
         //database class which allows me to connect to my database
         private SchoolDbContext School = new SchoolDbContext();
 
-        //this controller will allow access to a list of classes in the school
+        //this controller will allow access to a list of courses in the school
         ///<summary>
-        ///Returns a list of classes in the system
+        ///Returns a list of courses in the system
         /// </summary>
         /// <example>
-        /// GET/api/ClassesData/ListClasses
+        /// GET/api/CourseData/ListCourse
         /// </example>
         [HttpGet]
-        [Route("api/ClassesData/ListClasses/{SearchKey?}")]
-        public IEnumerable<Classes> ListClasses(string SearchKey = null)
+        [Route("api/CourseData/ListCourse/{SearchKey?}")]
+        public IEnumerable<Course> ListCourse(string SearchKey = null)
         {
             //create connection
             MySqlConnection conn = School.AccessDatabase();
@@ -40,7 +40,7 @@ namespace TeacherProject.Controllers
             //Gather result set of query into a variable
             MySqlDataReader reader = command.ExecuteReader();
             //create an empty list of classes
-            List<Classes> ClassesData = new List<Classes>();
+            List<Course> CourseData = new List<Course>();
             //loop through each row of the result set
             while (reader.Read())
             {
@@ -53,31 +53,31 @@ namespace TeacherProject.Controllers
                 string classname = reader["classname"].ToString();
                 //string ClassInfo = reader["classId"] + " " + reader["classcode"] + " " + reader["teacherId"] + " " + reader["startdate"] + " " + reader["finishdate"] + " " + reader["classname"];
 
-                Classes NewClass = new Classes();
-                NewClass.ClassID = classId;
-                NewClass.ClassCode = classcode;
-                NewClass.TeacherID = teacherId;
-                NewClass.StartDate = startdate;
-                NewClass.FinishDate = finishdate;
-                NewClass.ClassName = classname;
+                Course NewCourse = new Course();
+                NewCourse.ClassID = classId;
+                NewCourse.ClassCode = classcode;
+                NewCourse.TeacherID = teacherId;
+                NewCourse.StartDate = startdate;
+                NewCourse.FinishDate = finishdate;
+                NewCourse.ClassName = classname;
                 //add data to the list
-                ClassesData.Add(NewClass);
+                CourseData.Add(NewCourse);
             }
             //close the connection
             conn.Close();
             //return the final list of teachers
-            return ClassesData;
+            return CourseData;
         }
 
         ///<summary>
-        ///Find a class in the system given an id
+        ///Find a course in the system given an id
         /// </summary>
-        /// <param name="id">The class primary key</param>
-        /// <returns>A classes object</returns>
+        /// <param name="id">The course primary key</param>
+        /// <returns>A course object</returns>
         [HttpGet]
-        public Classes FindClasses(int id)
+        public Course FindCourse(int id)
         {
-            Classes NewClass = new Classes();
+            Course NewCourse = new Course();
 
             //create instance of new connection
             MySqlConnection conn = School.AccessDatabase();
@@ -105,15 +105,15 @@ namespace TeacherProject.Controllers
                 string classname = reader["classname"].ToString();
 
 
-                NewClass.ClassID = classId;
-                NewClass.ClassCode = classcode;
-                NewClass.TeacherID = teacherId;
-                NewClass.StartDate = startdate;
-                NewClass.FinishDate = finishdate;
-                NewClass.ClassName = classname;
+                NewCourse.ClassID = classId;
+                NewCourse.ClassCode = classcode;
+                NewCourse.TeacherID = teacherId;
+                NewCourse.StartDate = startdate;
+                NewCourse.FinishDate = finishdate;
+                NewCourse.ClassName = classname;
             }
 
-            return NewClass;
+            return NewCourse;
         }
     }
 }

@@ -1,0 +1,23 @@
+﻿@model IEnumerable<TeacherProject.Models.Course>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+<p>This page should be showing all information on all courses.</p>
+<a class="btn btn-primary" href="/">Back to Home</a>
+<div id="containerList">
+    <h2>List of Courses</h2>
+    <form action="/Course/List" method="GET">
+        <input type="text" name="SearchKey" value="" autocomplete="off" />
+        <input type="submit" value="Search" />
+    </form>
+    @foreach (var course in Model)
+    {
+        <div class="listitem row">
+            <div class="col1-md-12"><a href="/Course/Show/@course.ClassID">@course.ClassCode @course.ClassName</a></div>
+        </div>
+    }
+</div>
+

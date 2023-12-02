@@ -5,9 +5,9 @@ using System.Web;
 
 namespace TeacherProject.Models
 {
-    public class Classes
+    public class Course
     {
-        //following classes define a class
+        //following classes define a course
         public int ClassID;
         public string ClassCode;
         public int TeacherID;

@@ -21,8 +21,11 @@ namespace TeacherProject.Controllers
         ///<summary>
         ///Returns a list of teachers in the system
         /// </summary>
+        /// <returns>
+        /// A list of Teacher Objects with fields mapped to the database column values (first name, last name, employee number...)
+        /// </returns>
         /// <example>
-        /// GET/api/TeacherData/ListTeachers
+        /// GET/api/TeacherData/ListTeachers -> {Teacher Object, Teacher Object, Teacher Object...}
         /// </example>
         [HttpGet]
         [Route("api/TeacherData/ListTeachers/{SearchKey?}")]
@@ -76,7 +79,9 @@ namespace TeacherProject.Controllers
         ///Find a Teacher in the system given an id
         /// </summary>
         /// <param name="id">The teacher primary key</param>
-        /// <returns>A teacher object</returns>
+        /// <returns>A teacher object containing information about the teacher with a matching ID. Empty Teacher Object if the ID does not match any teachers in the system.</returns>
+        /// <example>api/TeacherData/FindTeacher/6 -> {Teacher Object}</example>
+        /// <example>api/TeacherData/FindTeacher/10 -> {Teacher Object}</example>
         [HttpGet]
         public Teacher FindTeacher(int id)
         {
