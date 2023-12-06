@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using TeacherProject.Models;
 
 namespace TeacherProject.Controllers
@@ -114,6 +115,124 @@ namespace TeacherProject.Controllers
             }
 
             return NewCourse;
+        }
+
+        ///<summary>
+        ///Deletes a course from the connected mySQL Database if the ID of that course exists 
+        /// </summary>
+        /// <param name="=id">The ID of the course</param>
+        /// <example>
+        /// POST /api/CourseData/DeleteCourse/3
+        /// </example>
+        /// 
+        [HttpPost]
+        public void DeleteCourse(int id)
+        {
+            //create an instance of a connection
+            MySqlConnection conn = School.AccessDatabase();
+
+            //open the connection
+            conn.Open();
+
+            //establish a new cmd
+            MySqlCommand cmd = conn.CreateCommand();
+
+            //SQL Query
+            cmd.CommandText = "Delete from classes where classid=@id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            //close the conenction
+            conn.Close();
+        }
+
+        ///<summary>
+        ///adds a class to the SQL database
+        /// </summary>
+        /// <param name="NewCourse">An object with the fields that map to the columns of the course table</param>
+        /// <example>
+        /// POST api/CourseData/AddCourse
+        /// FORM DATA / POST DATA / REQUEST BODY
+        /// {
+        ///     "ClassCode": HTTP1001
+        ///     "StartDate": 2023-12-05 00:00:00
+        ///     "FinishDate": 2024-04-05 00:00:00
+        ///     "ClassName": Intro to Web Development
+        /// }
+        /// </example>
+        /// 
+        [HttpPost]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void AddCourse([FromBody] Course NewCourse)
+        {
+            //create an instance of a connection
+            MySqlConnection conn = School.AccessDatabase();
+
+            //open the connection between web sever and database
+            conn.Open();
+
+            //establish a new query for database
+            MySqlCommand cmd = conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "insert into classes (classcode, teacherid, startdate, finishdate, classname) values (@ClassCode,@TeacherId,@StartDate,@FinishDate,@ClassName)";
+            cmd.Parameters.AddWithValue("@ClassCode", NewCourse.ClassCode);
+            cmd.Parameters.AddWithValue("@TeacherId", NewCourse.TeacherID);
+            cmd.Parameters.AddWithValue("@StartDate", NewCourse.StartDate);
+            cmd.Parameters.AddWithValue("@FinishDate", NewCourse.FinishDate);
+            cmd.Parameters.AddWithValue("@ClassName", NewCourse.ClassName);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            //close the connection
+            conn.Close();
+        }
+
+        ///<summary>
+        ///Updates a course on the MySQL Database. Non-deterministic.
+        /// </summary>
+        /// <param name="CourseInfo">An object with fields that map to column of the course table</param>
+        /// <example>
+        /// POST api/CourseData/UpdateCourse/209
+        /// FORM DATA / POST DATA / REQUEST BODY
+        /// {
+        ///     "ClassCode": HTTP3100
+        ///     "TeacherID": 4
+        ///     "StartDate": 2023-09-05
+        ///     "FinishDate": 2024-05-05 00:00:00
+        ///     "ClassName": Strategies in Web Development
+        /// }
+        /// </example>
+        /// 
+        [HttpPost]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void UpdateCourse(int id, [FromBody] Course CourseInfo)
+        {
+            //create a conenction
+            MySqlConnection Conn = School.AccessDatabase();
+
+            //open the connection
+            Conn.Open();
+
+            //estbalish a new query
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "update classes set classcode=@ClassCode, teacherid=@TeacherID, startdate=@StartDate, finishdate=@FinishDate, classname=@ClassName where classid=@ClassID";
+            cmd.Parameters.AddWithValue("@ClassCode", CourseInfo.ClassCode);
+            cmd.Parameters.AddWithValue("@TeacherID", CourseInfo.TeacherID);
+            cmd.Parameters.AddWithValue("@StartDate", CourseInfo.StartDate);
+            cmd.Parameters.AddWithValue("@FinishDate", CourseInfo.FinishDate);
+            cmd.Parameters.AddWithValue("@ClassName", CourseInfo.ClassName);
+            cmd.Parameters.AddWithValue("@ClassID", id);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
         }
     }
 }

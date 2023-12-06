@@ -198,5 +198,49 @@ namespace TeacherProject.Controllers
             conn.Close();
         }
 
+        ///<summary>
+        ///Updates a teacher on the MySQL Database. Non-deterministic.
+        /// </summary>
+        /// <param name="TeacherInfo">An object with fields that map to column of the teacher table</param>
+        /// <example>
+        /// POST api/TeacherData/UpdateTeacher/209
+        /// FORM DATA / POST DATA / REQUEST BODY
+        /// {
+        ///     "TeacherFname": Ederes
+        ///     "TeacherLname": Gure
+        ///     "EmployeeNumber": T304
+        ///     "HireDate": 2024-01-20 00:00:00
+        ///     "Salary": 70.00
+        /// }
+        /// </example>
+        /// 
+        [HttpPost]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void UpdateTeacher(int id, [FromBody] Teacher TeacherInfo)
+        {
+            //create a conenction
+            MySqlConnection Conn = School.AccessDatabase();
+
+            //open the connection
+            Conn.Open();
+
+            //estbalish a new query
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "update teachers set teacherfname=@TeacherFname, teacherlname=@TeacherLname, employeenumber=@EmployeeNumber, hiredate=@HireDate, salary=@Salary where teacherid=@TeacherID";
+            cmd.Parameters.AddWithValue("@TeacherFname", TeacherInfo.TeacherFName);
+            cmd.Parameters.AddWithValue("@TeacherLname", TeacherInfo.TeacherLName);
+            cmd.Parameters.AddWithValue("@EmployeeNumber", TeacherInfo.EmployeeNumber);
+            cmd.Parameters.AddWithValue("@HireDate", TeacherInfo.HireDate);
+            cmd.Parameters.AddWithValue("@Salary", TeacherInfo.Salary);
+            cmd.Parameters.AddWithValue("@TeacherID", id);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
+        }
+
     }
 }

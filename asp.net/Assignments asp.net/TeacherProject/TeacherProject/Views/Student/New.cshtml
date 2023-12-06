@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "New";
+}
+
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/Student/List">Back to Students</a>
+    </nav>
+    <h2>New Student</h2>
+    <form method="POST" action="/Student/Create" name="AddStudent">
+        <div class="inputrow">
+            <label for="StudentFname">First Name:</label>
+            <input type="text" id="StudentFname" name="StudentFname" />
+
+        </div>
+        <div class="inputrow">
+            <label for="StudentLname">Last Name:</label>
+            <input type="text" id="StudentLname" name="StudentLname" />
+
+        </div>
+        <div class="inputrow">
+            <label for="StudentNumber">Student Number:</label>
+            <input type="text" id="StudentNumber" name="StudentNumber" />
+        </div>
+        <div class="inputrow">
+            <label for="EnrolDate">Date Enrolled:</label>
+            <input type="text" id="EnrolDate" name="EnrolDate" />
+        </div>
+        </div>
+        <div class="inputrow">
+            <input type="submit" value="Create Student" />
+        </div>
+    </form>
+<script>
+    var studentHandle = document.forms.AddStudent;
+    studentHandle.onsubmit = processStudent;
+    function processStudent() {
+        var fnInput = studentHandle.StudentFname;
+        if (fnInput.value === "") {
+            fnInput.style.background = 'red';
+            fnInput.focus();
+            return false;
+        }
+        var lnInput = studentHandle.StudentLname;
+        if (lnInput.value === "") {
+            lnInput.style.background = 'red';
+            lnInput.focus();
+            return false;
+        }
+        var snInput = studentHandle.StudentNumber;
+        if (snInput.value === "") {
+            snInput.style.background = 'red';
+            snInput.focus();
+            return false;
+        }
+        var edInput = studentHandle.EnrolDate;
+        if (edInput.value === "") {
+            edInput.style.background = 'red';
+            edInput.focus();
+            return false;
+        }
+    }
+</script>
+</div>
+
