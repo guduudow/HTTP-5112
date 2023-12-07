@@ -83,10 +83,13 @@ AFTER INSERT
 ON animals
 FOR EACH ROW
 BEGIN
-	INSERT INTO animals(entry_date)
-    VALUES (CURRENT_DATE());
+	INSERT INTO entry_and_exit(entry_date, animal_id)
+    VALUES (CURRENT_DATE(), animal_id);
 END; //
 DELIMITER ;
+
+/*A TRIGGER THAT WOULD UPDATE ANIMAL TABLE TO RECORD ENTRY DATE AUTOMATICALLY*/
+
 
 -- PART FOUR: VIEW FOR SEEING TOTAL DONATIONS FOR EACH SPECIES --
 
@@ -94,4 +97,4 @@ DELIMITER ;
 -- SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 
 CREATE VIEW total_funding_species 
-AS SELECT species, amount FROM funding GROUP BY species ORDER BY amount DESC;
+AS SELECT species, amount FROM funding GROUP BY species ORDER BY amount DESC; -- GETTING SQL ERROR CODE #1055
