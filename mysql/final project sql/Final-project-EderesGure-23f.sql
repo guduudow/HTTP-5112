@@ -6,16 +6,15 @@
 CREATE TABLE animals (
     animal_id INT(3) PRIMARY KEY AUTO_INCREMENT,
     animal_name VARCHAR(50) NOT NULL,
-    animal_type VARCHAR(50) NOT NULL,
-    species VARCHAR(50) NOT NULL,
-    entry_date DATE,
-    exit_date DATE
+    animal_species VARCHAR(50) NOT NULL,
+    family VARCHAR(50) NOT NULL,
+    check_status VARCHAR(50)
 ) ENGINE= INNODB DEFAULT CHARSET=utf8 ;
 
 /* CODE FOR ENTRY/EXIT TABLE */
 CREATE TABLE entry_and_exit (
     port_id INT(3) PRIMARY KEY AUTO_INCREMENT,
-    animal_id VARCHAR(50) REFERENCES animals(animal_id),
+    animal_id INT(3), FOREIGN KEY(animal_id) REFERENCES animals(animal_id),
     entry_date DATE,
     exit_date DATE
 ) ENGINE= INNODB DEFAULT CHARSET=utf8 ;
@@ -30,9 +29,9 @@ CREATE TABLE donors (
 /* CODE FOR FUNDING TABLE */
 CREATE TABLE funding (
     funding_id INT(3) PRIMARY KEY AUTO_INCREMENT,
-    animal_id VARCHAR(50) REFERENCES animals(animal_id),
+    animal_id INT(3), FOREIGN KEY(animal_id) REFERENCES animals(animal_id),
     species VARCHAR(50) NOT NULL,
-    donor_id INT(3) REFERENCES donors(donor_id),
+    donor_id INT(3), FOREIGN KEY (donor_id) REFERENCES donors(donor_id),
     amount DECIMAL(10,2),
     date_given DATE
 ) ENGINE= INNODB DEFAULT CHARSET=utf8 ;
@@ -42,12 +41,12 @@ CREATE TABLE funding (
 
 /* CREATING A PROCEDURE THAT WILL ALLOW ME TO AUTOMATICALLY ADD ANIMALS TO THE TABLE, RATHER THAN WRITE OUT EVERYTHING ALL THE TIME */
 DELIMITER //
-CREATE PROCEDURE add_animal (IN p_animal_name VARCHAR(50), IN p_animal_type VARCHAR(50), IN p_species VARCHAR(50), IN p_entry_date DATE, IN p_exit_date DATE)
+CREATE PROCEDURE add_animal (IN p_animal_name VARCHAR(50), IN p_animal_species VARCHAR(50), IN p_family VARCHAR(50), IN p_check_status VARCHAR(50))
 BEGIN
 	DECLARE var_animal_id INT;
     SELECT MAX(animal_id) + 1 INTO var_animal_id FROM animals;
-    INSERT INTO animals(animal_id, animal_name, animal_type, species, entry_date, exit_date)
-    VALUES (var_animal_id, p_animal_name, p_animal_type, p_species, p_entry_date, p_exit_date);
+    INSERT INTO animals(animal_id, animal_name, animal_species, family, check_status)
+    VALUES (var_animal_id, p_animal_name, p_animal_species, p_family, p_check_status);
 END; //
 DELIMITER ;
 
@@ -74,7 +73,7 @@ END; //
 DELIMITER ;
 
 
--- PART THREE: CREATING TRIGGER FOR ANIMAL AND ENTRY/EXIT TABLE --
+-- PART THREE: CREATING TRIGGERS FOR ANIMAL AND ENTRY/EXIT TABLE --
 
 /* CREATING A TRIGGER TO AUTO RECORD THE ENTRY DATE (WHEN ANIMAL IS ADDED TO TABLE) AND EXIT DATE */
 DELIMITER //
@@ -83,20 +82,58 @@ AFTER INSERT
 ON animals
 FOR EACH ROW
 BEGIN
-	INSERT INTO entry_and_exit(entry_date, animal_id) --TRIGGER ISSUE IS ANIMAL ID NOT SHOWING ON TABLE--
-    VALUES (CURRENT_DATE(), animal_id);
+	INSERT INTO entry_and_exit(entry_date, animal_id) 
+    VALUES (CURRENT_DATE(), NEW.animal_id);
 END; //
 DELIMITER ;
 
-/*A TRIGGER THAT WOULD UPDATE ANIMAL TABLE TO RECORD ENTRY DATE AUTOMATICALLY*/
+/* ANOTHER TRIGGER THAT ADDS EXIT DATE UPON CHECK STATUS CHANGE */
 
-/* A TRIGGER THAT WOULD ADD EXIT DATE (CURRENT DAY) TO ENTRY/EXIT TABLE WHEN ANIMAL IS DROPPED */
+DELIMITER //
+CREATE TRIGGER add_exit_animal
+AFTER INSERT
+ON entry_and_exit
+BEGIN
+	INSERT INTO animals(exit_date)
+    VALUES (CURRENT_DATE);
+END ; //
+DELIMITER ;
+
+/* CHANGING ANIMAL STATUS, WILL UPDATE add_exit_animal trigger */
+UPDATE animals SET check_status = "left" WHERE animal_id =INT; 
+
+
+
+/* A TRIGGER THAT WOULD ADD EXIT DATE (CURRENT DAY) TO ENTRY/EXIT TABLE WHEN ANIMAL STATUS IS CHANGED */
+DELIMITER //
+CREATE TRIGGER animal_exit
+AFTER UPDATE
+ON animals
+FOR EACH ROW
+    BEGIN
+        IF NEW.check_status = "left"
+        THEN
+            UPDATE entry_and_exit
+            SET exit_date = CURRENT_DATE
+            WHERE animal_id = NEW.animal_id;
+        END IF;
+    END ; //
+DELIMITER ;
+
 
 
 -- PART FOUR: VIEW FOR SEEING TOTAL DONATIONS FOR EACH SPECIES --
 
 /* VIEW FOR FUNDING TABLE TO SHOW SPECIES BY TOTAL FUNDING SORTED BY MOST TO LEAST */
--- SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
-
-CREATE VIEW total_funding_species 
-AS SELECT species, amount FROM funding GROUP BY species ORDER BY amount DESC; -- GETTING SQL ERROR CODE #1055
+CREATE VIEW species_donation_summary AS
+SELECT
+    a.family,
+    SUM(f.amount) AS total_donation
+FROM
+    animals a
+JOIN
+    funding f ON a.animal_id = f.animal_id
+GROUP BY
+    a.family
+ORDER BY
+    total_donation DESC;
