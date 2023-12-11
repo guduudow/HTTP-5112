@@ -315,6 +315,9 @@
     <Content Include="Views\Student\Ajax_Update.cshtml" />
     <Content Include="Views\Teacher\Ajax_New.cshtml" />
     <Content Include="Views\Teacher\Ajax_Update.cshtml" />
+    <Content Include="Views\Teacher\Ajax_Delete.cshtml" />
+    <Content Include="Views\Student\Ajax_Delete.cshtml" />
+    <Content Include="Views\Course\Ajax_Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

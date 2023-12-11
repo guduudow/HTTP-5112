@@ -50,6 +50,12 @@ namespace TeacherProject.Controllers
             return RedirectToAction("List");
         }
 
+        //POST: /Course/Ajax_Delete
+        public ActionResult Ajax_Delete(int id)
+        {
+            return View();
+        }
+
         //GET: /Course/New
         public ActionResult New() 
         { 

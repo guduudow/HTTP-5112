@@ -5,18 +5,18 @@
 
     /*
     This file uses a combination of server rendering and ajax logic.
-    - Server Rendering to pull current information about the author and display in fields
-    - Request to update author with new values is fulfilled by ajax
+    - Server Rendering to pull current information about the Course and display in fields
+    - Request to update Course with new values is fulfilled by ajax
     */
 }
 
 <div id="containershow">
     <nav>
-        <a class="navlink" href="/Author/List">Back To Authors</a>
+        <a class="navlink" href="/Course/List">Back To Courses</a>
     </nav>
-    <h2>Update @Model.AuthorFname @Model.AuthorLname</h2>
+    <h2>Update @Model.ClassCode @Model.ClassName</h2>
     @{
-        /* AJAX Request to update author */
+        /* AJAX Request to update Course */
         /* No form submission needed */
         /* button onclick will handle form submission */
         /* Each item has an ID for validation && ajax submission */
@@ -24,28 +24,34 @@
 
     }
     <div class="inputrow">
-        <label for="AuthorFname">First Name:</label>
-        <input type="text" id="AuthorFname" name="AuthorFname" value="@Model.AuthorFname" />
+        <label for="ClassCode">Class Code:</label>
+        <input type="text" id="ClassCode" name="ClassCode" value="@Model.ClassCode"/>
 
     </div>
     <div class="inputrow">
-        <label for="AuthorLname">Last Name:</label>
-        <input type="text" id="AuthorLname" name="AuthorLname" value="@Model.AuthorLname" />
+        <label for="TeacherID">Last Name:</label>
+        <input type="text" id="TeacherID" name="TeacherID" value="@Model.TeacherID"/>
 
     </div>
     <div class="inputrow">
-        <label for="AuthorEmail">Email:</label>
-        <input type="text" id="AuthorEmail" name="AuthorEmail" value="@Model.AuthorEmail" />
+        <label for="StartDate">Start Date:</label>
+        <input type="text" id="StartDate" name="StartDate" value="@Model.StartDate"/>
     </div>
     <div class="inputrow">
-        <label for="AuthorBio">Biography:</label>
+        <label for="FinishDate">Finish Date:</label>
         <div>
-            <textarea id="AuthorBio" name="AuthorBio">@Model.AuthorBio</textarea>
+            <input type="text" id="FinishDate" name="FinishDate" value="@Model.FinishDate"/>
+        </div>
+    </div>
+    <div class="inputrow">
+        <label for="ClassName">Class Name:</label>
+        <div>
+            <input type="text" id="ClassName" name="ClassName" value="@Model.ClassName"/>
         </div>
     </div>
     @{
-        //AddAuthor() is a JS method defined in /Scripts/authors.js
+        //AddCourse() is a JS method defined in /Scripts/Courses.js
     }
-    <button onclick="UpdateAuthor(@Model.AuthorId);">Update Author</button>
+    <button onclick="UpdateCourse(@Model.ClassID);">Update Course</button>
 </div>
 

@@ -1,0 +1,32 @@
+﻿@model TeacherProject.Models.Student
+@{
+    ViewBag.Title = "Ajax_Delete";
+}
+
+    /*
+    This file uses a combination of server rendering and ajax logic.
+    - Server Rendering to pull current information about the Student and display in fields
+    - Request to Delete Student with new values is fulfilled by ajax
+    */
+}
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/Student/List">Back To Students</a>
+    </nav>
+    <h2>Delete @Model.StudentFName @Model.StudentLName</h2>
+    @{
+        /* AJAX Request to Delete Student */
+        /* No form submission needed */
+        /* button onclick will handle form submission */
+        /* Each item has an ID for validation && ajax submission */
+
+
+    }
+<p>Are you sure you want to delete @Model.StudentFName @Model.StudentLName? This action cannot be undone.</p>
+    @{
+        //DeleteStudent() is a JS method defined in /Scripts/students.js
+    }
+    <button onclick="DeleteStudent(@Model.StudentID);">Delete Student</button>
+</div>>
+

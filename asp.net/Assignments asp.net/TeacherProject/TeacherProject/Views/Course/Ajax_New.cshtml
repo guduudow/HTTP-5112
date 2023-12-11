@@ -5,11 +5,11 @@
 
 <div id="containershow">
     <nav>
-        <a class="navlink" href="/Author/List">Back To Authors</a>
+        <a class="navlink" href="/Course/List">Back To Courses</a>
     </nav>
-    <h2>New Author</h2>
+    <h2>New Course</h2>
     @{
-        /* AJAX Request to add author */
+        /* AJAX Request to add Course */
         /* No form submission needed */
         /* button onclick will handle form submission */
         /* Each item has an ID for validation && ajax submission */
@@ -17,28 +17,34 @@
 
     }
     <div class="inputrow">
-        <label for="AuthorFname">First Name:</label>
-        <input type="text" id="AuthorFname" name="AuthorFname" />
+        <label for="ClassCode">Class Code:</label>
+        <input type="text" id="ClassCode" name="ClassCode" />
 
     </div>
     <div class="inputrow">
-        <label for="AuthorLname">Last Name:</label>
-        <input type="text" id="AuthorLname" name="AuthorLname" />
+        <label for="TeacherID">Last Name:</label>
+        <input type="text" id="TeacherID" name="TeacherID" />
 
     </div>
     <div class="inputrow">
-        <label for="AuthorEmail">Email:</label>
-        <input type="text" id="AuthorEmail" name="AuthorEmail" />
+        <label for="StartDate">Start Date:</label>
+        <input type="text" id="StartDate" name="StartDate" />
     </div>
     <div class="inputrow">
-        <label for="AuthorBio">Biography:</label>
+        <label for="FinishDate">Finish Date:</label>
         <div>
-            <textarea id="AuthorBio" name="AuthorBio"></textarea>
+            <input type="text" id="FinishDate" name="FinishDate" />
+        </div>
+    </div>
+    <div class="inputrow">
+        <label for="ClassName">Class Name:</label>
+        <div>
+            <input type="text" id="ClassName" name="ClassName" />
         </div>
     </div>
     @{
-        //AddAuthor() is a JS method defined in /Scripts/authors.js
+        //AddCourse() is a JS method defined in /Scripts/Courses.js
     }
-    <button onclick="AddAuthor();">Add Author</button>
+    <button onclick="AddCourse();">Add Course</button>
 </div>
 

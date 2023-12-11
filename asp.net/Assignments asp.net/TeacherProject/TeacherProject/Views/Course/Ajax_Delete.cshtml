@@ -1,0 +1,28 @@
+﻿@model TeacherProject.Models.Course
+
+@{
+    ViewBag.Title = "Ajax_Delete";
+}
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/Course/List">Back To Courses</a>
+    </nav>
+    <h2>Delete Course</h2>
+    @{
+        /* AJAX Request to delete Course */
+        /* No form submission needed */
+        /* button onclick will handle form submission */
+        /* Each item has an ID for validation && ajax submission */
+
+
+    }
+    <h2>Are you sure you want to delete @Model.ClassCode @Model.ClassName ?</h2>
+    <div>
+        <p>This cannot be undone.</p>
+    </div>
+    @{
+        //DeleteCourse() is a JS method defined in /Scripts/courses.js
+    }
+    <button onclick="DeleteCourse();">Delete Course</button>
+</div>
