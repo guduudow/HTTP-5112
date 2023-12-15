@@ -1,4 +1,11 @@
 /* SQL PROJECT - EDERES GURE */
+--------------------------------------------------------------------------
+-- TABLE OF CONTENTS --                                                   
+-- PART ONE: CODE FOR MAKING TABLES --                                    
+-- PART TWO: CREATING PROCEDURES FOR ANIMAL, DONOR AND FUNDING TABLES --
+-- PART THREE: CREATING TRIGGERS FOR ANIMAL AND ENTRY/EXIT TABLE --
+-- PART FOUR: VIEW FOR SEEING TOTAL DONATIONS FOR EACH SPECIES --
+--------------------------------------------------------------------------
 
 -- PART ONE: CODE FOR MAKING TABLES --
 
@@ -50,7 +57,7 @@ BEGIN
 END; //
 DELIMITER ;
 
-/*PROCEDURE FOR DONOR TABLE */
+/* PROCEDURE FOR DONOR TABLE */
 DELIMITER //
 CREATE PROCEDURE add_donor (IN p_first_name VARCHAR(50), IN p_last_name VARCHAR(50))
 BEGIN
@@ -61,7 +68,7 @@ BEGIN
 END; //
 DELIMITER ;
 
-/*PROCEDURE FOR FUNDING TABLE*/
+/* PROCEDURE FOR FUNDING TABLE */
 DELIMITER //
 CREATE PROCEDURE add_funding (IN p_animal_id INT(3), IN p_species VARCHAR(50), IN p_donor_id INT(3), IN p_amount DECIMAL(10,2), IN p_date_given DATE)
 BEGIN
@@ -101,6 +108,11 @@ DELIMITER ;
 
 /* CHANGING ANIMAL STATUS, WILL UPDATE add_exit_animal trigger */
 UPDATE animals SET check_status = "left" WHERE animal_id =INT; 
+
+/* ADD ANIMAL, FUNDING, DONOR FOR PRESENTATION */
+CALL add_animal ("Daffy", "Duck", "Anatidae", "Present");
+CALL add_funding (10, "Anatidae", 6, 3570.00, "2023-12-12");
+CALL add_donor ("Tim", "Horton");
 
 
 
